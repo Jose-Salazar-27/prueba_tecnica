@@ -44,13 +44,14 @@ func (rec *UserController) HandleRequest(w http.ResponseWriter, r *http.Request)
 
 // TODO colocar la funcionalidad que correponde
 func (rec *UserController) ListUsers(w http.ResponseWriter, r *http.Request) error {
-	result, err := rec.service.GetUser(1)
+	var users []models.User
+	_, err := rec.service.GetAllUsers(&users)
 
 	if err != nil {
 		common.JsonWriter(w, http.StatusBadRequest, err)
 	}
 
-	common.JsonWriter(w, http.StatusOK, result)
+	common.JsonWriter(w, http.StatusOK, users)
 	return nil
 }
 
