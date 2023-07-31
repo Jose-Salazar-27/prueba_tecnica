@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/Jose-Salazar-27/prueba_tecnica/common"
 	"github.com/Jose-Salazar-27/prueba_tecnica/models"
 	"github.com/Jose-Salazar-27/prueba_tecnica/services"
+	"github.com/gorilla/mux"
 )
 
 type Controller func(http.ResponseWriter, *http.Request) error
@@ -40,6 +42,7 @@ func (rec *UserController) HandleRequest(w http.ResponseWriter, r *http.Request)
 	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
+// TODO colocar la funcionalidad que correponde
 func (rec *UserController) ListUsers(w http.ResponseWriter, r *http.Request) error {
 	result, err := rec.service.GetUser(1)
 
@@ -58,6 +61,21 @@ func (rec *UserController) Create(w http.ResponseWriter, r *http.Request) error 
 	fmt.Println(user)
 
 	result, err := rec.service.CreateUser(user)
+
+	if err != nil {
+		return err
+	}
+
+	common.JsonWriter(w, http.StatusCreated, result)
+	return nil
+}
+
+func (rec *UserController) GetUserById(w http.ResponseWriter, r *http.Request) error {
+	params := mux.Vars(r)
+	id, _ := strconv.Atoi(params["id"])
+	fmt.Println(id)
+
+	result, err := rec.service.GetUser(id)
 
 	if err != nil {
 		return err
