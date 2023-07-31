@@ -3,6 +3,7 @@ package repositories
 import (
 	"time"
 
+	"github.com/Jose-Salazar-27/prueba_tecnica/common"
 	"github.com/Jose-Salazar-27/prueba_tecnica/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -62,7 +63,16 @@ func (rec *PostgresRepository) List() ([]*models.User, error) {
 }
 
 func (rec *PostgresRepository) FindById(id int) (*models.User, error) {
-	return UserMock[0], nil
+
+	var user models.User
+	rec.connector.First(&user, id)
+
+	if user.ID == 0 {
+		error := common.Exception{Message: "user not found"}
+		return nil, &error
+	}
+
+	return &user, nil
 }
 
 func (rec *PostgresRepository) DeleteById(id int) error {
