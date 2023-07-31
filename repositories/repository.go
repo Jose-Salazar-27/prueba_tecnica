@@ -1,8 +1,6 @@
 package repositories
 
 import (
-	"fmt"
-
 	"github.com/Jose-Salazar-27/prueba_tecnica/common"
 	"github.com/Jose-Salazar-27/prueba_tecnica/models"
 	"gorm.io/driver/postgres"
@@ -42,7 +40,6 @@ func NewRepository() (*PostgresRepository, error) {
 func (rec *PostgresRepository) List(entity *[]models.User) (any, error) {
 
 	result := rec.connector.Find(&entity)
-	fmt.Println(result)
 
 	if result.Error != nil {
 		return nil, result.Error
