@@ -3,6 +3,7 @@ package services
 import (
 	"time"
 
+	"github.com/Jose-Salazar-27/prueba_tecnica/common"
 	"github.com/Jose-Salazar-27/prueba_tecnica/models"
 	"github.com/Jose-Salazar-27/prueba_tecnica/repositories"
 )
@@ -43,7 +44,19 @@ var UserMock = []*models.User{
 }
 
 func (rec *UserService) GetUser(id int) (*models.User, error) {
-	return UserMock[id], nil
+
+	result, err := rec.Repository.FindById(id)
+
+	if id == 0 {
+		err := common.Exception{Message: "id invalid or not provided"}
+		return nil, &err
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (rec *UserService) CreateUser(user *models.User) (*models.User, error) {
