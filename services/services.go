@@ -58,5 +58,14 @@ func (rec *UserService) GetAllUsers(users *[]models.User) (any, error) {
 	}
 
 	return result, nil
+}
 
+func (rec *UserService) DeleteUserById(id int) error {
+	err := rec.Repository.DeleteById(id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -62,7 +62,15 @@ func (rec *PostgresRepository) FindById(id int) (*models.User, error) {
 }
 
 func (rec *PostgresRepository) DeleteById(id int) error {
+	user := models.User{}
+	result := rec.connector.Delete(&user, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
 	return nil
+
 }
 
 func (rec *PostgresRepository) Create(user *models.User) (*models.User, error) {

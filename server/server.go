@@ -25,8 +25,8 @@ func (rec *Server) Init() {
 		panic("Cannot initialze controller properly")
 	}
 
-	router.HandleFunc("/users", rec.MakeHandler(userContoller.HandleRequest))
-	router.HandleFunc("/users/{id}", rec.MakeHandler(userContoller.GetUserById))
+	router.HandleFunc("/users", rec.MakeHandler(userContoller.HandleUserRequest))
+	router.HandleFunc("/users/{id}", rec.MakeHandler(userContoller.UserByIdRequest))
 
 	http.ListenAndServe(rec.listenAdrr, router)
 }

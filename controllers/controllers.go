@@ -30,13 +30,29 @@ func NewUserController() (*UserController, error) {
 	}, nil
 }
 
-func (rec *UserController) HandleRequest(w http.ResponseWriter, r *http.Request) error {
+func (rec *UserController) HandleUserRequest(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == http.MethodGet {
 		return rec.ListUsers(w, r)
 	}
 
 	if r.Method == http.MethodPost {
 		return rec.Create(w, r)
+	}
+
+	if r.Method == http.MethodDelete {
+		return rec.DeleteById(w, r)
+	}
+
+	return fmt.Errorf("method not allowed %s", r.Method)
+}
+
+func (rec *UserController) UserByIdRequest(w http.ResponseWriter, r *http.Request) error {
+	if r.Method == http.MethodGet {
+		return rec.GetUserById(w, r)
+	}
+
+	if r.Method == http.MethodDelete {
+		return rec.DeleteById(w, r)
 	}
 
 	return fmt.Errorf("method not allowed %s", r.Method)
@@ -84,4 +100,18 @@ func (rec *UserController) GetUserById(w http.ResponseWriter, r *http.Request) e
 
 	common.JsonWriter(w, http.StatusCreated, result)
 	return nil
+}
+
+func (rec *UserController) DeleteById(w http.ResponseWriter, r *http.Request) error {
+	params := mux.Vars(r)
+	id, _ := strconv.Atoi(params["id"])
+	fmt.Println(id)
+
+	err := rec.service.DeleteUserById(id)
+
+	if err != nil {
+		return common.JsonWriter(w, http.StatusBadRequest, err)
+	}
+
+	return common.JsonWriter(w, http.StatusNoContent, nil)
 }
