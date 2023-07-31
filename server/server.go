@@ -26,7 +26,7 @@ func (rec *Server) Init() {
 	}
 
 	router.HandleFunc("/users", rec.MakeHandler(userContoller.HandleRequest))
-	// router.HandleFunc("/users", rec.MakeHandler(userContoller.Create)).Methods(http.MethodPost)
+	router.HandleFunc("/users/{id}", rec.MakeHandler(userContoller.GetUserById))
 
 	http.ListenAndServe(rec.listenAdrr, router)
 }
