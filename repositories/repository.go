@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"time"
+	"fmt"
 
 	"github.com/Jose-Salazar-27/prueba_tecnica/common"
 	"github.com/Jose-Salazar-27/prueba_tecnica/models"
@@ -10,8 +10,8 @@ import (
 )
 
 type Repository interface {
-	List() ([]*models.User, error)         //done
-	FindById(id int) (*models.User, error) //done
+	List(entity *[]models.User) (any, error) //done
+	FindById(id int) (*models.User, error)   //done
 	DeleteById(id int) error
 	Create(user *models.User) (*models.User, error)
 }
@@ -39,27 +39,16 @@ func NewRepository() (*PostgresRepository, error) {
 	}, nil
 }
 
-var UserMock = []*models.User{
-	&models.User{
-		ID:         1,
-		Name:       "jose",
-		LastName:   "sala",
-		Email:      "sample@email",
-		Profession: "programmer",
-		Created_at: time.Now().UTC(),
-	},
-	&models.User{
-		ID:         2,
-		Name:       "andres",
-		LastName:   "sala",
-		Email:      "sample@email",
-		Profession: "programmer",
-		Created_at: time.Now().UTC(),
-	},
-}
+func (rec *PostgresRepository) List(entity *[]models.User) (any, error) {
 
-func (rec *PostgresRepository) List() ([]*models.User, error) {
-	return UserMock, nil
+	result := rec.connector.Find(&entity)
+	fmt.Println(result)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return result, nil
 }
 
 func (rec *PostgresRepository) FindById(id int) (*models.User, error) {

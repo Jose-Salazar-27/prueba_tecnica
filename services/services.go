@@ -1,8 +1,6 @@
 package services
 
 import (
-	"time"
-
 	"github.com/Jose-Salazar-27/prueba_tecnica/common"
 	"github.com/Jose-Salazar-27/prueba_tecnica/models"
 	"github.com/Jose-Salazar-27/prueba_tecnica/repositories"
@@ -22,25 +20,6 @@ func NewUserService() (*UserService, error) {
 	return &UserService{
 		Repository: repo,
 	}, nil
-}
-
-var UserMock = []*models.User{
-	&models.User{
-		ID:         1,
-		Name:       "jose",
-		LastName:   "sala",
-		Email:      "sample@email",
-		Profession: "programmer",
-		Created_at: time.Now().UTC(),
-	},
-	&models.User{
-		ID:         2,
-		Name:       "andres",
-		LastName:   "sala",
-		Email:      "sample@email",
-		Profession: "programmer",
-		Created_at: time.Now().UTC(),
-	},
 }
 
 func (rec *UserService) GetUser(id int) (*models.User, error) {
@@ -67,4 +46,17 @@ func (rec *UserService) CreateUser(user *models.User) (*models.User, error) {
 	}
 
 	return record, nil
+}
+
+func (rec *UserService) GetAllUsers(users *[]models.User) (any, error) {
+	// var users []*models.User
+
+	result, err := rec.Repository.List(users)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+
 }
